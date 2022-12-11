@@ -1,0 +1,34 @@
+.login {
+    display: flex;
+    justify-content: center;
+    margin: 2%;
+    width: 100%;
+  }
+
+.mainLayout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  /* border: 2px solid cyan; */
+}
+
+.buttonStyle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 2%;
+  /* border: 2px solid red; */
+
+}
+
+.gridPart {
+  /* border: 2px solid green; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  
+}
