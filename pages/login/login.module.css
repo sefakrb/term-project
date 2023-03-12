@@ -20,11 +20,9 @@
   align-items: center;
   width: 100%;
   margin: 2%;
-  /* border: 2px solid red; */
 }
 
 .gridPart {
-  /* border: 2px solid green; */
   display: flex;
   justify-content: center;
   align-items: center;
