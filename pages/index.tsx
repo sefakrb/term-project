@@ -1,8 +1,5 @@
-import { Grid } from '@mui/material'
-import Login from './login';
+import Dashboard from "./dashboard/dashboard";
 
 export default function Home() {
-  return (
-      <Login></Login>
-  )
+  return <Dashboard></Dashboard>;
 }
