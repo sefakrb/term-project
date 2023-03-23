@@ -2,9 +2,9 @@ import { Grid } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import loginCss from './login.module.css'
 import Button from '@mui/material/Button'
-import { UsersService } from '../api/users'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { signIn } from 'next-auth/react'
 
 export default function Login() {
    const router = useRouter()
@@ -12,19 +12,17 @@ export default function Login() {
    const [userName, setUserName] = useState('')
    const [password, setPassword] = useState('')
 
-   function login() {
-      if (userName && password) {
-         UsersService.login({
-            userName: userName,
-            password: password,
-         }).then((response) => {
-            console.log(response)
-            if (response.id) {
-               router.push('/')
-            }
-         })
+   async function login() {
+      const res = await signIn('credentials', {
+         userName: userName,
+         password: password,
+         redirect: false,
+      })
+      console.log('resss: ', res)
+      if (res?.status === 200) {
+         router.push('/')
       } else {
-         console.log('not logged in')
+         alert('invalid credentials')
       }
    }
 
