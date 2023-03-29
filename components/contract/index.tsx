@@ -10,8 +10,13 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { ContractService } from '../../pages/api/contract'
+import Swal from 'sweetalert2'
 
 export default function Contract() {
+   const { status, data } = useSession()
+
    const [name, setName] = useState('')
    const [uri, setUri] = useState('')
 
@@ -35,8 +40,35 @@ export default function Contract() {
       setOwnable(event.target.checked)
    }
 
-   function createContract() {
+   async function createContract() {
       console.log('create Contract')
+
+      const createContractRequest: CreateContractRequest = {
+         userId: data?.user?.id,
+         nftName: name,
+         nftUri: uri,
+         isMintable: isMintable,
+         isBurnable: isBurnable,
+         isOwnable: isOwnable,
+      }
+      console.log(createContractRequest)
+
+      const newContract = await ContractService.createContract(
+         createContractRequest
+      ).then((res) => {
+         console.log(res)
+         if (!res.code) {
+            Swal.fire('Success!', 'Contract is created successfully', 'success')
+            setName('')
+            setUri('')
+            setMintable(false)
+            setBurnable(false)
+            setOwnable(false)
+         } else {
+            Swal.fire('Error!', res.error, 'error')
+         }
+      })
+
       //backendde create contract endpointine istek atılacak
    }
 
