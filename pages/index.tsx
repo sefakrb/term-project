@@ -1,5 +1,9 @@
 import Dashboard from './dashboard'
 
 export default function Home() {
-   return <Dashboard></Dashboard>
+   return (
+      <div>
+         <Dashboard></Dashboard>
+      </div>
+   )
 }

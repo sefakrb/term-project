@@ -1,0 +1,36 @@
+.outWrapper {
+   height: 100vh;
+   width: 100vw;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   background: linear-gradient(to right, gray, black);
+}
+
+.title {
+   margin-bottom: 2rem;
+   font-weight: 700;
+   font-size: 1.5rem;
+   /* background: linear-gradient(to right, gray 40%, black 60%);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent; */
+   color: rgb(237, 237, 237);
+}
+
+.card {
+   /* width: 60%; */
+   /* height: 60%; */
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   border-radius: 1.5rem;
+   border: 4px solid #b9b9b9;
+   padding: 1rem;
+}
+
+.button {
+   /* background: linear-gradient(to right, #808080, black); */
+   background: linear-gradient(to right, #808080, black);
+   font-size: 0.7rem;
+}
