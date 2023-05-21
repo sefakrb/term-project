@@ -1,4 +1,5 @@
-import { Grid } from '@mui/material'
+import { Grid, ThemeProvider } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
 import * as React from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
@@ -13,6 +14,7 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { ContractService } from '../../pages/api/contract'
 import Swal from 'sweetalert2'
+import contractCss from './contract.module.css'
 
 export default function Contract() {
    const { status, data } = useSession()
@@ -41,8 +43,6 @@ export default function Contract() {
    }
 
    async function createContract() {
-      console.log('create Contract')
-
       const createContractRequest: CreateContractRequest = {
          userId: data?.user?.id,
          nftName: name,
@@ -72,30 +72,29 @@ export default function Contract() {
       //backendde create contract endpointine istek atılacak
    }
 
+   const theme = createTheme({
+      palette: {
+         primary: {
+            main: '#808080', // Replace with your custom color
+         },
+      },
+   })
+
    return (
-      <div
-         style={{
-            height: '100vh',
-            width: '100vw',
-            display: 'flex',
-            justifyContent: 'center',
-         }}
-      >
-         {/* ERC721 OR ERC1155 */}
-         <Grid
-            columns={12}
-            container
-            style={{
-               display: 'flex',
-               justifyContent: 'center',
-               alignItems: 'center',
-            }}
-            spacing={0}
-         >
+      <ThemeProvider theme={theme}>
+         <Grid className={contractCss.outWrapper} container spacing={0}>
             {/* Detail Card Wrapper */}
-            <Grid xs={8} item>
+            <Grid xs={10} md={8} lg={5} item>
                {/* Detail Card */}
-               <Card variant="outlined" sx={{ minWidth: 275 }}>
+               <Typography className={contractCss.title} textAlign={'center'}>
+                  Create Contract
+               </Typography>
+
+               <Card
+                  className={contractCss.card}
+                  variant="elevation"
+                  sx={{ minWidth: 275 }}
+               >
                   <CardContent>
                      {/* Contract Details */}
                      <Typography
@@ -111,7 +110,7 @@ export default function Contract() {
                         columns={12}
                         style={{
                            display: 'flex',
-                           justifyContent: 'center',
+                           justifyContent: 'space-around',
                            margin: '2rem',
                         }}
                      >
@@ -253,8 +252,8 @@ export default function Contract() {
                   >
                      <Button
                         onClick={createContract}
-                        variant="outlined"
-                        size="small"
+                        variant="contained"
+                        className={contractCss.button}
                      >
                         Create Contract
                      </Button>
@@ -262,6 +261,6 @@ export default function Contract() {
                </Card>
             </Grid>
          </Grid>
-      </div>
+      </ThemeProvider>
    )
 }

@@ -2,10 +2,16 @@ import { Grid } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Contract from '../../components/contract'
+import { useEffect } from 'react'
+import { connect } from '../../utils/wallet'
 
 export default function Dashboard() {
    const { status, data } = useSession()
    const router = useRouter()
+
+   useEffect(() => {
+      connect()
+   }, [])
 
    if (status === 'unauthenticated') {
       router.push('/auth')

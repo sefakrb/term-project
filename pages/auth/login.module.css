@@ -1,30 +1,80 @@
-.login {
-  display: flex;
-  justify-content: center;
-  margin: 2%;
-  width: 100%;
-}
-
 .mainLayout {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  /* border: 2px solid cyan; */
+   display: flex;
+   /* flex-direction: column; */
+   justify-content: center;
+   align-items: center;
+   width: 100vw;
+   height: 100vh;
 }
 
-.buttonStyle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 2%;
+.image {
 }
 
-.gridPart {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+.card {
+   width: 60%;
+   height: 60%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   border-radius: 1.5rem;
+   border: 4px solid #b9b9b9;
+}
+
+.title {
+   font-size: 2rem;
+   font-weight: 600;
+   margin-bottom: 2rem;
+   background: linear-gradient(to right, gray 40%, black 60%);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+}
+
+.textFieldWrapper {
+   display: flex;
+   justify-content: space-around;
+}
+
+.gridWrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-bottom: 2rem;
+}
+
+.textField {
+   width: 80%;
+}
+
+.button {
+   background: linear-gradient(to right, #808080, black);
+   /* background: linear-gradient(to right, gray 40%, black 60%);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent; */
+}
+
+@media screen and (max-width: 600px) {
+   .title {
+      font-size: 1.5rem;
+   }
+
+   .image {
+      display: none;
+   }
+}
+
+@media screen and (max-width: 900px) {
+   .image {
+      display: none;
+   }
+   .card {
+      width: 75%;
+      height: 75%;
+   }
+}
+
+@media screen and (min-width: 2000px) {
+   .card {
+      width: 50%;
+      height: 50%;
+   }
 }
