@@ -29,7 +29,6 @@ export default function Login() {
          password: password,
          redirect: false,
       })
-      console.log('resss: ', res)
       if (res?.status === 200) {
          const Toast = Swal.mixin({
             toast: true,

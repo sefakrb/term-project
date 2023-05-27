@@ -8,4 +8,12 @@ export class ContractService {
       )
       return response.data
    }
+
+   static async addAddress(addAddressRequest: AddAddressRequest) {
+      const response = await axiosInstance.post(
+         '/contract/add-address',
+         addAddressRequest
+      )
+      return response.data
+   }
 }
