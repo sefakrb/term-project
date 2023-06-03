@@ -10,7 +10,18 @@ const authOptions = {
    providers: [
       CredentialsProvider({
          type: 'credentials',
-         credentials: {},
+         credentials: {
+            identifier: {
+               label: 'userName',
+               type: 'text',
+               placeholder: 'userName',
+            },
+            password: {
+               label: 'password',
+               type: 'password',
+               placeholder: 'password',
+            },
+         },
          async authorize(credentials, req) {
             const { userName, password } = credentials
             const loggedUser = await UsersService.login({
