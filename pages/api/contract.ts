@@ -1,3 +1,5 @@
+import { AddAddressRequest } from '../../types/addAddressRequest'
+import { CreateContractRequest } from '../../types/createContractRequest'
 import axiosInstance from './api'
 
 export class ContractService {
