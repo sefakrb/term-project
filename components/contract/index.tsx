@@ -24,6 +24,11 @@ import Swal from 'sweetalert2'
 import contractCss from './contract.module.css'
 import { deploy } from '../../utils/deploy'
 import CircularProgress from '@mui/material/CircularProgress'
+import { shallowCopy } from 'ethers/lib/utils'
+
+interface UserInterface {
+   id: number
+}
 
 export default function Contract() {
    const { status, data } = useSession()
@@ -35,6 +40,9 @@ export default function Contract() {
    const [isMintable, setMintable] = useState(true)
    const [isBurnable, setBurnable] = useState(true)
    const [access, setAccess] = React.useState('Ownable')
+
+   let JSONdata = JSON.stringify(data?.user)
+   let user: UserInterface = JSON.parse(JSONdata)
 
    const handleAccessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setAccess((event.target as HTMLInputElement).value)
@@ -54,7 +62,7 @@ export default function Contract() {
 
    async function createContract() {
       const createContractRequest: CreateContractRequest = {
-         userId: data?.user?.id,
+         userId: user.id,
          nftName: name,
          nftUri: uri,
          isMintable: isMintable,
