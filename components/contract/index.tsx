@@ -41,8 +41,7 @@ export default function Contract() {
    const [isBurnable, setBurnable] = useState(true)
    const [access, setAccess] = React.useState('Ownable')
 
-   let JSONdata = JSON.stringify(data?.user)
-   let user: UserInterface = JSON.parse(JSONdata)
+   const user: UserInterface = JSON.parse(JSON.stringify(data?.user))
 
    const handleAccessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setAccess((event.target as HTMLInputElement).value)
