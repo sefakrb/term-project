@@ -1,5 +1,4 @@
 import {
-   Box,
    FormControl,
    Grid,
    Radio,
@@ -24,7 +23,8 @@ import Swal from 'sweetalert2'
 import contractCss from './contract.module.css'
 import { deploy } from '../../utils/deploy'
 import CircularProgress from '@mui/material/CircularProgress'
-import { shallowCopy } from 'ethers/lib/utils'
+import { AddAddressRequest } from '../../types/addAddressRequest'
+import { CreateContractRequest } from '../../types/createContractRequest'
 
 interface UserInterface {
    id: number

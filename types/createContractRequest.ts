@@ -1,4 +1,4 @@
-interface CreateContractRequest {
+export interface CreateContractRequest {
    userId: number
    nftName: string
    nftUri: string
