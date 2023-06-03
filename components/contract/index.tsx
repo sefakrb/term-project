@@ -26,10 +26,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { AddAddressRequest } from '../../types/addAddressRequest'
 import { CreateContractRequest } from '../../types/createContractRequest'
 
-interface UserInterface {
-   id: number
-}
-
 export default function Contract() {
    const { status, data } = useSession()
 
@@ -40,8 +36,6 @@ export default function Contract() {
    const [isMintable, setMintable] = useState(true)
    const [isBurnable, setBurnable] = useState(true)
    const [access, setAccess] = React.useState('Ownable')
-
-   const user: UserInterface = JSON.parse(JSON.stringify(data?.user))
 
    const handleAccessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setAccess((event.target as HTMLInputElement).value)
@@ -61,7 +55,7 @@ export default function Contract() {
 
    async function createContract() {
       const createContractRequest: CreateContractRequest = {
-         userId: user.id,
+         userId: 1,
          nftName: name,
          nftUri: uri,
          isMintable: isMintable,
