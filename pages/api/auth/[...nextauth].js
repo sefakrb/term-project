@@ -22,18 +22,18 @@ const authOptions = {
                placeholder: 'password',
             },
          },
-         async authorize(credentials, req) {
+         async authorize(credentials) {
             const { userName, password } = credentials
-            const loggedUser = await UsersService.login({
+            return await UsersService.login({
                userName,
                password,
             }).then((user) => {
                if (!user.id) {
                   throw new Error('invalid credentialts')
                }
-               return { id: user.id, user: user }
+               return user
             })
-            return { id: loggedUser.id, user: loggedUser }
+            // return { id: loggedUser.id, user: loggedUser }
          },
       }),
    ],
@@ -43,14 +43,12 @@ const authOptions = {
    callbacks: {
       jwt: ({ token, user }) => {
          if (user) {
-            token.id = user.id
+            token.user = user
          }
          return token
       },
       session: ({ session, token }) => {
-         if (token) {
-            session.user = { ...session.user, id: token.id }
-         }
+         session.user = token.user
          return session
       },
    },

@@ -17,7 +17,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import { ContractService } from '../../pages/api/contract'
 import Swal from 'sweetalert2'
 import contractCss from './contract.module.css'
@@ -26,8 +26,16 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { AddAddressRequest } from '../../types/addAddressRequest'
 import { CreateContractRequest } from '../../types/createContractRequest'
 
+declare module 'next-auth' {
+   interface Session {
+      user: {
+         id: number
+      }
+   }
+}
+
 export default function Contract() {
-   const { status, data } = useSession()
+   const { data: session, status } = useSession()
 
    const [name, setName] = useState('')
    const [uri, setUri] = useState('')
@@ -55,7 +63,7 @@ export default function Contract() {
 
    async function createContract() {
       const createContractRequest: CreateContractRequest = {
-         userId: 1,
+         userId: session?.user.id || -1,
          nftName: name,
          nftUri: uri,
          isMintable: isMintable,
@@ -104,7 +112,7 @@ export default function Contract() {
             }
          )
       } catch (error) {
-         Swal.fire('Error!', 'Error has ocured', 'error')
+         Swal.fire('Error!', 'Error has occured', 'error')
          setLoading(false)
       }
    }
