@@ -118,21 +118,45 @@ export default function Contract() {
    }
 
    function handleName(event: React.ChangeEvent<HTMLInputElement>) {
-      const newValue = event.target.value
+      let newValue = event.target.value.replace(/[^\w\s]/gi, "")
       const isValidInput = /^[A-Za-z].*/.test(newValue)
+      newValue = trToEn(newValue);
+      const spacelessValue = removeSpaces(newValue);
 
-      if (isValidInput || newValue == '') {
-         setName(newValue)
+      if (isValidInput || spacelessValue == '') {
+         setName(spacelessValue)
       }
    }
 
    function handleURI(event: React.ChangeEvent<HTMLInputElement>) {
-      const newValue = event.target.value
+      let newValue = event.target.value.replace(/[^\w\s]/gi, "")
       const isValidInput = /^[A-Za-z].*/.test(newValue)
+      newValue = trToEn(newValue);
+      const spacelessValue = removeSpaces(newValue);
 
-      if (isValidInput || newValue == '') {
-         setUri(newValue)
+      if (isValidInput || spacelessValue == '') {
+         setUri(spacelessValue)
       }
+   }
+
+   function removeSpaces(val: string) {
+      return val.split(' ').join('');
+   }
+
+   function trToEn(text: string) {
+      return text.replaceAll('Ğ','g')
+            .replaceAll('Ü','u')
+            .replaceAll('Ş','s')
+            .replaceAll('I','i')
+            .replaceAll('İ','i')
+            .replaceAll('Ö','o')
+            .replaceAll('Ç','c')
+            .replaceAll('ğ','g')
+            .replaceAll('ü','u')
+            .replaceAll('ş','s')
+            .replaceAll('ı','i')
+            .replaceAll('ö','o')
+            .replaceAll('ç','c');
    }
 
    const theme = createTheme({

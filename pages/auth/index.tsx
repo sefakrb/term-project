@@ -16,14 +16,20 @@ import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import Swal from 'sweetalert2'
 import { createTheme } from '@mui/material/styles'
+import LoadingButton from '@mui/lab/LoadingButton';
+
 
 export default function Login() {
    const router = useRouter()
 
    const [userName, setUserName] = useState('')
    const [password, setPassword] = useState('')
+   const [loading, setLoading] = useState(false)
+
 
    async function login() {
+      setLoading(true)
+
       const res = await signIn('credentials', {
          userName: userName,
          password: password,
@@ -46,8 +52,10 @@ export default function Login() {
             icon: 'success',
             title: 'Logged in successfully',
          })
+         setLoading(false)
          router.push('/')
       } else {
+         setLoading(false)
          Swal.fire('Error!', 'Invalid Credentials!', 'error')
       }
    }
@@ -143,13 +151,17 @@ export default function Login() {
                         </ThemeProvider>
                      </Grid>
                      <Grid className={loginCss.gridWrapper} item xs={12}>
-                        <Button
+                        <LoadingButton
+                           classes={{
+                              loadingIndicator: loginCss.loadingColor
+                           }}
+                           loading={loading}
                            onClick={login}
                            className={loginCss.button}
                            variant="contained"
                         >
                            Login
-                        </Button>
+                        </LoadingButton>
                      </Grid>
                   </Grid>
                </CardContent>
