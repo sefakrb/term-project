@@ -1,9 +1,11 @@
 import {
+   AppBar,
    FormControl,
    Grid,
    Radio,
    RadioGroup,
    ThemeProvider,
+   Toolbar,
 } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
 import * as React from 'react'
@@ -17,7 +19,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { useState } from 'react'
-import { getSession, useSession } from 'next-auth/react'
+import { getSession, signOut, useSession } from 'next-auth/react'
 import { ContractService } from '../../pages/api/contract'
 import Swal from 'sweetalert2'
 import contractCss from './contract.module.css'
@@ -118,10 +120,10 @@ export default function Contract() {
    }
 
    function handleName(event: React.ChangeEvent<HTMLInputElement>) {
-      let newValue = event.target.value.replace(/[^\w\s]/gi, "")
+      let newValue = event.target.value.replace(/[^\w\s]/gi, '')
       const isValidInput = /^[A-Za-z].*/.test(newValue)
-      newValue = trToEn(newValue);
-      const spacelessValue = removeSpaces(newValue);
+      newValue = trToEn(newValue)
+      const spacelessValue = removeSpaces(newValue)
 
       if (isValidInput || spacelessValue == '') {
          setName(spacelessValue)
@@ -129,10 +131,10 @@ export default function Contract() {
    }
 
    function handleURI(event: React.ChangeEvent<HTMLInputElement>) {
-      let newValue = event.target.value.replace(/[^\w\s]/gi, "")
+      let newValue = event.target.value.replace(/[^\w\s]/gi, '')
       const isValidInput = /^[A-Za-z].*/.test(newValue)
-      newValue = trToEn(newValue);
-      const spacelessValue = removeSpaces(newValue);
+      newValue = trToEn(newValue)
+      const spacelessValue = removeSpaces(newValue)
 
       if (isValidInput || spacelessValue == '') {
          setUri(spacelessValue)
@@ -140,23 +142,24 @@ export default function Contract() {
    }
 
    function removeSpaces(val: string) {
-      return val.split(' ').join('');
+      return val.split(' ').join('')
    }
 
    function trToEn(text: string) {
-      return text.replaceAll('Ğ','g')
-            .replaceAll('Ü','u')
-            .replaceAll('Ş','s')
-            .replaceAll('I','i')
-            .replaceAll('İ','i')
-            .replaceAll('Ö','o')
-            .replaceAll('Ç','c')
-            .replaceAll('ğ','g')
-            .replaceAll('ü','u')
-            .replaceAll('ş','s')
-            .replaceAll('ı','i')
-            .replaceAll('ö','o')
-            .replaceAll('ç','c');
+      return text
+         .replaceAll('Ğ', 'g')
+         .replaceAll('Ü', 'u')
+         .replaceAll('Ş', 's')
+         .replaceAll('I', 'i')
+         .replaceAll('İ', 'i')
+         .replaceAll('Ö', 'o')
+         .replaceAll('Ç', 'c')
+         .replaceAll('ğ', 'g')
+         .replaceAll('ü', 'u')
+         .replaceAll('ş', 's')
+         .replaceAll('ı', 'i')
+         .replaceAll('ö', 'o')
+         .replaceAll('ç', 'c')
    }
 
    const theme = createTheme({

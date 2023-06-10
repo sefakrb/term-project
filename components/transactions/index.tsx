@@ -4,7 +4,6 @@ import {
    FormControl,
    Grid,
    InputLabel,
-   Link,
    MenuItem,
    Select,
    SelectChangeEvent,
@@ -26,7 +25,6 @@ import { TransactionService } from '../../pages/api/transactions'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { ContractService } from '../../pages/api/contract'
 import { useRouter } from 'next/router'
-import { signOut } from 'next-auth/react'
 import { GetTransactionsRequest } from '../../types/getTransactionsRequest'
 
 interface ContractDetails {
@@ -200,32 +198,6 @@ export default function Transactions() {
    return (
       <ThemeProvider theme={theme}>
          <Grid className={transactionCss.outWrapper} container spacing={0}>
-            <Grid
-               item
-               xs={12}
-               md={12}
-               lg={12}
-               sx={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  height: '7vh',
-                  paddingTop: '1rem',
-                  paddingRight: '1rem',
-               }}
-            >
-               <Button
-                  variant="contained"
-                  sx={{
-                     backgroundColor: 'white',
-                     color: 'gray',
-                     fontWeight: '500',
-                     textTransform: 'none',
-                  }}
-                  onClick={() => signOut()}
-               >
-                  Logout
-               </Button>
-            </Grid>
             <Grid
                xs={10}
                md={12}

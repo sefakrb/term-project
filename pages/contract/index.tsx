@@ -1,9 +1,11 @@
 import {
+   AppBar,
    FormControl,
    Grid,
    Radio,
    RadioGroup,
    ThemeProvider,
+   Toolbar,
 } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
 import * as React from 'react'
@@ -17,7 +19,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { useState } from 'react'
-import { getSession, useSession } from 'next-auth/react'
+import { getSession, signOut, useSession } from 'next-auth/react'
 import { ContractService } from '../api/contract'
 import Swal from 'sweetalert2'
 import contractCss from './contract.module.css'
@@ -25,8 +27,9 @@ import { deploy } from '../../utils/deploy'
 import CircularProgress from '@mui/material/CircularProgress'
 import { AddAddressRequest } from '../../types/addAddressRequest'
 import { CreateContractRequest } from '../../types/createContractRequest'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+
 declare module 'next-auth' {
    interface Session {
       user: {
@@ -172,12 +175,29 @@ export default function Contract() {
    }
 
    if (status === 'unauthenticated') {
-      return <p>Access Denied</p>
+      router.push('/')
    }
 
    return (
       <>
          <ThemeProvider theme={theme}>
+            <AppBar position="sticky" sx={{ backgroundColor: '#1b1b1b' }}>
+               <Toolbar>
+                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                     Term Project
+                  </Typography>
+                  <Button
+                     sx={{
+                        textTransform: 'none',
+                        color: 'white',
+                        fontSize: '1rem',
+                     }}
+                     onClick={() => signOut()}
+                  >
+                     Logout
+                  </Button>
+               </Toolbar>
+            </AppBar>
             <Grid
                className={contractCss.outWrapper}
                container

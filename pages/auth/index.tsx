@@ -33,7 +33,7 @@ export default function Login() {
       if (res?.status === 200) {
          const Toast = Swal.mixin({
             toast: true,
-            position: 'top-end',
+            position: 'bottom-end',
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
@@ -80,7 +80,7 @@ export default function Login() {
             <CardMedia
                sx={{ height: '100vh', width: '100%' }}
                image="/images/login.jpg"
-               title="green iguana"
+               title="image"
             />
          </Grid>
          <Grid
