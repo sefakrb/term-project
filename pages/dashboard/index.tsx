@@ -1,7 +1,6 @@
 import { Grid } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import Contract from '../contract'
 import { useEffect } from 'react'
 import { connect } from '../../utils/wallet'
 import Transactions from '../../components/transactions'

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import axiosInstance from './api'
+import { GetTransactionsRequest } from '../../types/getTransactionsRequest'
 
 export class TransactionService {
    static async getTransactions(

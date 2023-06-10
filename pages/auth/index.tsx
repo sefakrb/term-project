@@ -1,8 +1,6 @@
 import {
    Card,
-   CardActions,
    CardContent,
-   CardHeader,
    CardMedia,
    Grid,
    ThemeProvider,
@@ -10,14 +8,12 @@ import {
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import loginCss from './login.module.css'
-import Button from '@mui/material/Button'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import Swal from 'sweetalert2'
 import { createTheme } from '@mui/material/styles'
-import LoadingButton from '@mui/lab/LoadingButton';
-
+import LoadingButton from '@mui/lab/LoadingButton'
 
 export default function Login() {
    const router = useRouter()
@@ -25,7 +21,6 @@ export default function Login() {
    const [userName, setUserName] = useState('')
    const [password, setPassword] = useState('')
    const [loading, setLoading] = useState(false)
-
 
    async function login() {
       setLoading(true)
@@ -168,7 +163,7 @@ export default function Login() {
                      <Grid className={loginCss.gridWrapper} item xs={12}>
                         <LoadingButton
                            classes={{
-                              loadingIndicator: loginCss.loadingColor
+                              loadingIndicator: loginCss.loadingColor,
                            }}
                            loading={loading}
                            onClick={login}

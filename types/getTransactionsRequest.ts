@@ -1,3 +1,3 @@
-interface GetTransactionsRequest {
+export interface GetTransactionsRequest {
    contractAddress: string
 }

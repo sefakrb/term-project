@@ -27,6 +27,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { ContractService } from '../../pages/api/contract'
 import { useRouter } from 'next/router'
 import { signOut } from 'next-auth/react'
+import { GetTransactionsRequest } from '../../types/getTransactionsRequest'
 
 interface ContractDetails {
    address: string
@@ -124,7 +125,7 @@ export default function Transactions() {
       {
          field: 'functionName',
          headerName: 'Function',
-         valueGetter: (params) => {
+         valueGetter: (params: any) => {
             if (params.row.functionName == '') {
                return 'Deploy Function'
             }
@@ -146,7 +147,7 @@ export default function Transactions() {
          field: 'to',
          headerName: 'To',
          width: 200,
-         valueGetter: (params) => {
+         valueGetter: (params: any) => {
             if (params.row.to == '') {
                const finded = contractAddresses.filter((item) => {
                   if (item.address === selectedContractAddress) {
@@ -156,7 +157,7 @@ export default function Transactions() {
                return 'Create: ' + finded.nftName
             }
          },
-         renderCell: (params) => {
+         renderCell: (params: any) => {
             const isRejected = params.value === 'Rejected'
             return (
                <Chip
@@ -303,7 +304,7 @@ export default function Transactions() {
 
                      <DataGrid
                         autoHeight={true}
-                        getRowId={(transaction) => transaction.hash}
+                        getRowId={(transaction: any) => transaction.hash}
                         rows={transactions}
                         columns={columns}
                         disableRowSelectionOnClick
