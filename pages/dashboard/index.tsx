@@ -1,9 +1,10 @@
 import { Grid } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import Contract from '../../components/contract'
+import Contract from '../contract'
 import { useEffect } from 'react'
 import { connect } from '../../utils/wallet'
+import Transactions from '../../components/transactions'
 
 export default function Dashboard() {
    const { status, data } = useSession()
@@ -23,7 +24,7 @@ export default function Dashboard() {
             columns={12}
             style={{ display: 'flex', justifyContent: 'center' }}
          >
-            <Contract></Contract>
+            <Transactions></Transactions>
          </Grid>
       </div>
    )

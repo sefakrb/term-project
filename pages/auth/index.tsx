@@ -104,11 +104,26 @@ export default function Login() {
                   <Typography textAlign={'center'} className={loginCss.title}>
                      Login
                   </Typography>
+
                   <Grid
                      className={loginCss.textFieldWrapper}
                      container
                      spacing={0}
                   >
+                     <Grid xs={12} md={10} lg={11} item>
+                        <div
+                           style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              backgroundColor: 'gray',
+                              padding: '0.5rem',
+                              borderRadius: '1rem',
+                           }}
+                        >
+                           <div style={{ color: 'white' }}>username: test</div>
+                           <div style={{ color: 'white' }}>password: test</div>
+                        </div>
+                     </Grid>
                      <Grid
                         className={loginCss.gridWrapper}
                         item

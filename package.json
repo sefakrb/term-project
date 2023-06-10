@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
     "@metamask/providers": "^11.0.0",
+    "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.132",
     "@mui/material": "^5.10.16",
+    "@mui/x-data-grid": "^6.6.0",
     "@next/font": "^13.0.7",
     "@types/node": "18.11.10",
     "@types/react": "18.0.26",

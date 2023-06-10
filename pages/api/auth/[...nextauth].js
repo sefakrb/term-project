@@ -7,6 +7,7 @@ const authOptions = {
       strategy: 'jwt',
       maxAge: 24 * 60 * 60, // 1 day
    },
+   secret: process.env.NEXTAUTH_URL,
    providers: [
       CredentialsProvider({
          type: 'credentials',

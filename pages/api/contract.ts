@@ -18,4 +18,13 @@ export class ContractService {
       )
       return response.data
    }
+
+   static async getContracts(userId: number) {
+      const response = await axiosInstance.get('/contract/deployed-contracts', {
+         params: {
+            userId: userId,
+         },
+      })
+      return response.data
+   }
 }
