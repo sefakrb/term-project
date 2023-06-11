@@ -2,7 +2,6 @@ import { ethers } from 'ethers'
 
 export async function deploy(params) {
    const provider = new ethers.providers.Web3Provider(window.ethereum)
-   await provider.send('eth_requestAccounts', [])
    const signer = provider.getSigner()
    const factory = new ethers.ContractFactory(
       JSON.parse(params.abi),
