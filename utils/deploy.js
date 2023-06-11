@@ -1,8 +1,8 @@
 import { ethers } from 'ethers'
+import { connect } from 'connect'
 
 export async function deploy(params) {
-   const provider = new ethers.providers.Web3Provider(window.ethereum)
-   const signer = provider.getSigner()
+   const signer = connect()
    const factory = new ethers.ContractFactory(
       JSON.parse(params.abi),
       params.byteCode,
@@ -10,10 +10,9 @@ export async function deploy(params) {
    )
 
    try {
-      const contract = await factory.deploy().then(async (res) => {
+      await factory.deploy().then(async (res) => {
          return res
       })
-      return contract
    } catch (error) {
       return false
    }

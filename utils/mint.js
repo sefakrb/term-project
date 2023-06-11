@@ -1,19 +1,17 @@
 import { ethers } from 'ethers'
+import { connect } from 'connect'
 
 export async function mint(params) {
-   const contract = await getContract(params.address, params.abi)
+   const signer = connect()
+   const contract = new ethers.Contract(params.address, params.abi, signer)
 
    try {
-      await contract.mint(params.to, params.id, params.amount)
+      await contract
+         .mint(params.to, params.id, params.amount)
+         .then(async (res) => {
+            return res
+         })
    } catch (error) {
       return error
-   }
-}
-
-const getContract = async (address, abi) => {
-   if (window?.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
-      return new ethers.Contract(address, abi, signer)
    }
 }
