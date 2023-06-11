@@ -108,20 +108,28 @@ export default function Transactions() {
          field: 'transactionIndex',
          headerName: 'Transaction Index',
          width: 130,
+         headerAlign: 'center',
+         align: 'center',
       },
       {
          field: 'hash',
          headerName: 'Hash',
          width: 200,
+         headerAlign: 'center',
+         align: 'center',
       },
       {
          field: 'timeStamp',
          headerName: 'Timestamp',
          width: 100,
+         headerAlign: 'center',
+         align: 'center',
       },
       {
          field: 'functionName',
          headerName: 'Function',
+         headerAlign: 'center',
+         align: 'center',
          valueGetter: (params: any) => {
             if (params.row.functionName == '') {
                return 'Deploy Function'
@@ -143,17 +151,22 @@ export default function Transactions() {
       {
          field: 'blockNumber',
          headerName: 'Block Number',
-
          width: 110,
+         headerAlign: 'center',
+         align: 'center',
       },
       {
          field: 'from',
          headerName: 'From',
          width: 200,
+         headerAlign: 'center',
+         align: 'center',
       },
       {
          field: 'to',
          headerName: 'To',
+         headerAlign: 'center',
+         align: 'center',
          width: 200,
          valueGetter: (params: any) => {
             if (params.row.to == '') {
@@ -171,26 +184,36 @@ export default function Transactions() {
       {
          field: 'value',
          headerName: 'Value',
+         headerAlign: 'center',
+         align: 'center',
          width: 60,
       },
       {
          field: 'txreceipt_status',
          headerName: 'Status',
+         headerAlign: 'center',
+         align: 'center',
          width: 60,
       },
       {
          field: 'gasUsed',
          headerName: 'Gas Used',
+         headerAlign: 'center',
+         align: 'center',
          width: 80,
       },
       {
          field: 'confirmations',
          headerName: 'Confirmations',
+         headerAlign: 'center',
+         align: 'center',
          width: 110,
       },
       {
          field: 'nonce',
          headerName: 'Nonce',
+         headerAlign: 'center',
+         align: 'center',
          width: 70,
       },
    ]
