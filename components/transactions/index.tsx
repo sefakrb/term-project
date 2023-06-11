@@ -1,12 +1,18 @@
 import {
    Button,
    Chip,
+   Dialog,
+   DialogActions,
+   DialogContent,
+   DialogContentText,
+   DialogTitle,
    FormControl,
    Grid,
    InputLabel,
    MenuItem,
    Select,
    SelectChangeEvent,
+   TextField,
    ThemeProvider,
 } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
@@ -24,8 +30,9 @@ import { TransactionService } from '../../pages/api/transactions'
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { ContractService } from '../../pages/api/contract'
-import { useRouter } from 'next/router'
 import { GetTransactionsRequest } from '../../types/getTransactionsRequest'
+import { mint } from '../../utils/mint'
+import { burn } from '../../utils/burn'
 
 interface ContractDetails {
    address: string
@@ -34,21 +41,24 @@ interface ContractDetails {
 
 export default function Transactions() {
    const { data: session, status } = useSession()
-
    const [selectedContractAddress, setSelectedContractAddress] = useState('')
-   const [fetch, setFetch] = useState(false)
-
+   const [transactions, setTransactions] = useState([])
    const [contractAddresses, setContractAddresses] = useState<
       ContractDetails[]
    >([])
+   const [openMint, setOpenMint] = React.useState(false)
+   const [openBurn, setOpenBurn] = React.useState(false)
+   const [mintOrBurnAddress, setMintOrBurnAddress] = React.useState('')
+   const [mintOrBurnID, setMintOrBurnID] = React.useState(-1)
+   const [mintOrBurnAmount, setMintOrBurnAmount] = React.useState(-1)
 
-   const handleChange = (event: SelectChangeEvent) => {
-      setSelectedContractAddress(event.target.value as string)
-   }
-
-   const [transactions, setTransactions] = useState([])
-
-   const [loading, setLoading] = useState(false)
+   const theme = createTheme({
+      palette: {
+         primary: {
+            main: '#808080', // Replace with your custom color
+         },
+      },
+   })
 
    if (status !== 'loading' && contractAddresses.length <= 0) {
       getContractAddress(session?.user?.id || -1)
@@ -58,8 +68,6 @@ export default function Transactions() {
       ContractService.getContracts(userId).then((res) => {
          let arr: ContractDetails[] = []
          if (res.data) {
-            setFetch(true)
-
             res.data.map((item: any) => {
                arr.push({
                   address: item.address,
@@ -76,15 +84,11 @@ export default function Transactions() {
       const getTransactionsRequest: GetTransactionsRequest = {
          contractAddress: address,
       }
-
-      setLoading(true)
-
       try {
          await TransactionService.getTransactions(getTransactionsRequest).then(
             async (res) => {
                if (!res) {
                   // Swal.fire('Error!', res.error, 'error')
-                  setLoading(false)
                   return
                }
                setTransactions(res.data) //format eklenmeli
@@ -92,17 +96,12 @@ export default function Transactions() {
          )
       } catch (error) {
          Swal.fire('Error!', 'Error has occured', 'error')
-         setLoading(false)
       }
    }
 
-   const theme = createTheme({
-      palette: {
-         primary: {
-            main: '#808080', // Replace with your custom color
-         },
-      },
-   })
+   const handleChangeContractAddress = (event: SelectChangeEvent) => {
+      setSelectedContractAddress(event.target.value as string)
+   }
 
    const columns: GridColDef[] = [
       {
@@ -126,9 +125,20 @@ export default function Transactions() {
          valueGetter: (params: any) => {
             if (params.row.functionName == '') {
                return 'Deploy Function'
+            } else {
+               return params.row.functionName.split('(')[0]
             }
          },
-         width: 140,
+         renderCell: (params: any) => {
+            return (
+               <Chip
+                  label={params.value}
+                  variant={'filled'}
+                  color={'success'}
+               />
+            )
+         },
+         width: 150,
       },
       {
          field: 'blockNumber',
@@ -153,17 +163,9 @@ export default function Transactions() {
                   }
                })[0]
                return 'Create: ' + finded.nftName
+            } else {
+               return params.row.to
             }
-         },
-         renderCell: (params: any) => {
-            const isRejected = params.value === 'Rejected'
-            return (
-               <Chip
-                  label={params.value}
-                  variant={'filled'}
-                  color={'success'}
-               />
-            )
          },
       },
       {
@@ -193,7 +195,79 @@ export default function Transactions() {
       },
    ]
 
-   const router = useRouter()
+   const handleClickOpenMint = () => {
+      setOpenMint(true)
+   }
+
+   const handleCloseMint = () => {
+      setOpenMint(false)
+      setMintOrBurnAddress('')
+      setMintOrBurnID(-1)
+      setMintOrBurnAmount(-1)
+   }
+
+   const handleClickOpenBurn = () => {
+      setOpenBurn(true)
+   }
+
+   const handleCloseBurn = () => {
+      setOpenBurn(false)
+      setMintOrBurnAddress('')
+      setMintOrBurnID(-1)
+      setMintOrBurnAmount(-1)
+   }
+
+   const handlemintOrBurnAddressChange = (e: React.BaseSyntheticEvent) => {
+      setMintOrBurnAddress(e.target.value)
+   }
+   const handlemintOrBurnIDChange = (e: React.BaseSyntheticEvent) => {
+      setMintOrBurnID(e.target.value)
+   }
+   const handlemintOrBurnAmountChange = (e: React.BaseSyntheticEvent) => {
+      setMintOrBurnAmount(e.target.value)
+   }
+
+   const mintNft = () => {
+      TransactionService.getAbi(selectedContractAddress).then((abiRes) => {
+         const mintRequest = {
+            address: selectedContractAddress,
+            abi: abiRes.data,
+            to: mintOrBurnAddress,
+            id: mintOrBurnID,
+            amount: mintOrBurnAmount,
+         }
+
+         mint(mintRequest).then((mintRes: any) => {
+            if (mintRes?.code === 1) {
+               JSON.stringify(mintRes.error)
+               Swal.fire('Error!', mintRes.error.reason, 'error')
+            } else {
+               Swal.fire('Success!', 'You minted successfully', 'success')
+            }
+            handleCloseMint()
+         })
+      })
+   }
+   const burnNft = () => {
+      TransactionService.getAbi(selectedContractAddress).then((abiRes) => {
+         const burnRequest = {
+            address: selectedContractAddress,
+            abi: abiRes.data,
+            to: mintOrBurnAddress,
+            id: mintOrBurnID,
+            amount: mintOrBurnAmount,
+         }
+         burn(burnRequest).then((burnRes: any) => {
+            if (burnRes.code === 1) {
+               JSON.stringify(burnRes.error)
+               Swal.fire('Error!', burnRes.error.reason, 'error')
+            } else {
+               Swal.fire('Success!', 'You burned successfully', 'success')
+            }
+            handleCloseBurn()
+         })
+      })
+   }
 
    return (
       <ThemeProvider theme={theme}>
@@ -234,18 +308,123 @@ export default function Transactions() {
             <Grid xs={10} md={12} lg={10} item>
                <Card className={transactionCss.card} variant="elevation">
                   <CardContent>
-                     <Typography
-                        style={{ textAlign: 'center' }}
-                        sx={{
-                           fontSize: '1.5rem',
-                           marginBottom: '1.5rem',
-                           fontWeight: '700',
+                     <div
+                        style={{
+                           position: 'relative',
+                           height: '10vh',
                         }}
-                        color="text.secondary"
-                        gutterBottom
                      >
-                        Contract Details
-                     </Typography>
+                        <Typography
+                           style={{ textAlign: 'center' }}
+                           sx={{
+                              fontSize: '1.5rem',
+                              marginBottom: '1.5rem',
+                              fontWeight: '700',
+                              zIndex: 3,
+                              position: 'absolute',
+                              width: '100%',
+                           }}
+                           className={transactionCss.headerTitle}
+                           color="text.secondary"
+                           gutterBottom
+                        >
+                           Contract Details
+                        </Typography>
+                        {selectedContractAddress !== '' && (
+                           <div
+                              style={{
+                                 zIndex: 4,
+                                 position: 'absolute',
+                                 display: 'flex',
+                                 justifyContent: 'flex-end',
+                                 width: '100%',
+                              }}
+                           >
+                              <Button
+                                 variant="outlined"
+                                 sx={{ marginRight: '1rem' }}
+                                 size="small"
+                                 onClick={handleClickOpenMint}
+                              >
+                                 Mint
+                              </Button>
+
+                              <Button
+                                 onClick={handleClickOpenBurn}
+                                 variant="outlined"
+                                 size="small"
+                              >
+                                 Burn
+                              </Button>
+                              <Dialog
+                                 sx={{ zIndex: 1000 }}
+                                 open={openMint || openBurn}
+                                 onClose={() => {
+                                    openMint
+                                       ? handleCloseMint()
+                                       : handleCloseBurn()
+                                 }}
+                              >
+                                 <DialogTitle textAlign={'center'}>
+                                    {openMint ? 'MINT' : 'BURN'}
+                                 </DialogTitle>
+                                 <DialogContent>
+                                    <DialogContentText textAlign={'center'}>
+                                       Please enter mint address, id and amount
+                                    </DialogContentText>
+                                    <TextField
+                                       autoFocus
+                                       margin="dense"
+                                       id="address"
+                                       label="Address"
+                                       type="text"
+                                       fullWidth
+                                       variant="standard"
+                                       onChange={handlemintOrBurnAddressChange}
+                                    />
+                                    <TextField
+                                       autoFocus
+                                       margin="dense"
+                                       id="name"
+                                       label="ID"
+                                       type="number"
+                                       fullWidth
+                                       variant="standard"
+                                       onChange={handlemintOrBurnIDChange}
+                                    />
+                                    <TextField
+                                       autoFocus
+                                       margin="dense"
+                                       id="amount"
+                                       label="amount"
+                                       type="number"
+                                       fullWidth
+                                       variant="standard"
+                                       onChange={handlemintOrBurnAmountChange}
+                                    />
+                                 </DialogContent>
+                                 <DialogActions>
+                                    <Button
+                                       onClick={() => {
+                                          openMint
+                                             ? handleCloseMint()
+                                             : handleCloseBurn()
+                                       }}
+                                    >
+                                       Cancel
+                                    </Button>
+                                    <Button
+                                       onClick={() => {
+                                          openMint ? mintNft() : burnNft()
+                                       }}
+                                    >
+                                       {openMint ? 'MINT' : 'BURN'}
+                                    </Button>
+                                 </DialogActions>
+                              </Dialog>
+                           </div>
+                        )}
+                     </div>
 
                      <FormControl sx={{ marginBottom: '1rem' }} fullWidth>
                         <InputLabel id="demo-simple-select-label">
@@ -255,13 +434,13 @@ export default function Transactions() {
                            labelId="demo-simple-select-label"
                            id="demo-simple-select"
                            label="Contract Address"
-                           onChange={handleChange}
+                           onChange={handleChangeContractAddress}
                            value={selectedContractAddress}
                            margin="dense"
                         >
                            {contractAddresses.map((item, index) => (
                               <MenuItem
-                                 key={index}
+                                 key={item.address}
                                  value={item.address}
                                  onClick={() => {
                                     setSelectedContractAddress(item.address)

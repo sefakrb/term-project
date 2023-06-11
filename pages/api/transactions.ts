@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { GetTransactionsRequest } from '../../types/getTransactionsRequest'
+import axiosInstance from './api'
 
 export class TransactionService {
    static async getTransactions(
@@ -10,5 +11,14 @@ export class TransactionService {
          getTransactionsRequest
       )
       return response
+   }
+
+   static async getAbi(contractAddress: string) {
+      const response = await axiosInstance.get('/contract/abi', {
+         params: {
+            contractAddress: contractAddress,
+         },
+      })
+      return response.data
    }
 }
