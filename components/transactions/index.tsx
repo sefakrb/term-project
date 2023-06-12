@@ -33,6 +33,7 @@ import { ContractService } from '../../pages/api/contract'
 import { GetTransactionsRequest } from '../../types/getTransactionsRequest'
 import { mint } from '../../utils/mint'
 import { burn } from '../../utils/burn'
+import { LoadingButton } from '@mui/lab'
 
 interface ContractDetails {
    address: string
@@ -51,6 +52,7 @@ export default function Transactions() {
    const [mintOrBurnAddress, setMintOrBurnAddress] = React.useState('')
    const [mintOrBurnID, setMintOrBurnID] = React.useState(-1)
    const [mintOrBurnAmount, setMintOrBurnAmount] = React.useState(-1)
+   const [loading, setLoading] = React.useState(false)
 
    const theme = createTheme({
       palette: {
@@ -251,6 +253,7 @@ export default function Transactions() {
    }
 
    const mintNft = () => {
+      setLoading(true)
       TransactionService.getAbi(selectedContractAddress).then((abiRes) => {
          const mintRequest = {
             address: selectedContractAddress,
@@ -261,6 +264,8 @@ export default function Transactions() {
          }
 
          mint(mintRequest).then((mintRes: any) => {
+            setLoading(false)
+
             if (mintRes?.code === 1) {
                JSON.stringify(mintRes.error)
                Swal.fire('Error!', mintRes.error.reason, 'error')
@@ -272,6 +277,8 @@ export default function Transactions() {
       })
    }
    const burnNft = () => {
+      setLoading(true)
+
       TransactionService.getAbi(selectedContractAddress).then((abiRes) => {
          const burnRequest = {
             address: selectedContractAddress,
@@ -281,6 +288,7 @@ export default function Transactions() {
             amount: mintOrBurnAmount,
          }
          burn(burnRequest).then((burnRes: any) => {
+            setLoading(false)
             if (burnRes.code === 1) {
                JSON.stringify(burnRes.error)
                Swal.fire('Error!', burnRes.error.reason, 'error')
@@ -371,7 +379,6 @@ export default function Transactions() {
                               >
                                  Mint
                               </Button>
-
                               <Button
                                  onClick={handleClickOpenBurn}
                                  variant="outlined"
@@ -436,13 +443,18 @@ export default function Transactions() {
                                     >
                                        Cancel
                                     </Button>
-                                    <Button
+                                    <LoadingButton
+                                       classes={{
+                                          loadingIndicator:
+                                             transactionCss.loadingColor,
+                                       }}
+                                       loading={loading}
                                        onClick={() => {
                                           openMint ? mintNft() : burnNft()
                                        }}
                                     >
                                        {openMint ? 'MINT' : 'BURN'}
-                                    </Button>
+                                    </LoadingButton>
                                  </DialogActions>
                               </Dialog>
                            </div>
