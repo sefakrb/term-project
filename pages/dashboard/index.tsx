@@ -6,7 +6,7 @@ import { connect } from '../../utils/wallet'
 import Transactions from '../../components/transactions'
 
 export default function Dashboard() {
-   const { status, data } = useSession()
+   const { status } = useSession()
    const router = useRouter()
 
    useEffect(() => {

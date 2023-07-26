@@ -19,7 +19,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { useState } from 'react'
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { ContractService } from '../api/contract'
 import Swal from 'sweetalert2'
 import contractCss from './contract.module.css'
@@ -27,7 +27,7 @@ import { deploy } from '../../utils/deploy'
 import CircularProgress from '@mui/material/CircularProgress'
 import { AddAddressRequest } from '../../types/addAddressRequest'
 import { CreateContractRequest } from '../../types/createContractRequest'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 
 declare module 'next-auth' {
@@ -47,7 +47,7 @@ export default function Contract() {
 
    const [isMintable, setMintable] = useState(true)
    const [isBurnable, setBurnable] = useState(true)
-   const [access, setAccess] = React.useState('Ownable')
+   const [access, setAccess] = useState('Ownable')
 
    const router = useRouter()
 
@@ -69,7 +69,7 @@ export default function Contract() {
 
    async function createContract() {
       const createContractRequest: CreateContractRequest = {
-         userId: session?.user.id || -1,
+         userId: session?.user.id ?? -1,
          nftName: name,
          nftUri: uri,
          isMintable: isMintable,
@@ -146,7 +146,7 @@ export default function Contract() {
    const theme = createTheme({
       palette: {
          primary: {
-            main: '#808080', // Replace with your custom color
+            main: '#808080',
          },
       },
    })
@@ -208,9 +208,7 @@ export default function Contract() {
                   opacity: loading ? 0.6 : 1,
                }}
             >
-               {/* Detail Card Wrapper */}
                <Grid xs={10} md={8} lg={5} item>
-                  {/* Detail Card */}
                   <div className={contractCss.title}>
                      <Button
                         variant="outlined"
@@ -234,7 +232,6 @@ export default function Contract() {
                      sx={{ minWidth: 275 }}
                   >
                      <CardContent>
-                        {/* Contract Details */}
                         <Typography
                            style={{ textAlign: 'center' }}
                            sx={{ fontSize: '1rem' }}
@@ -243,7 +240,6 @@ export default function Contract() {
                         >
                            Contract Details
                         </Typography>
-                        {/* Name and URI */}
                         <Grid
                            columns={12}
                            style={{
@@ -252,7 +248,6 @@ export default function Contract() {
                               margin: '2rem',
                            }}
                         >
-                           {/* Name Text Field */}
                            <Grid
                               style={{
                                  display: 'flex',
@@ -270,7 +265,6 @@ export default function Contract() {
                                  label="Name"
                               />
                            </Grid>
-                           {/* URI Text Field */}
                            <Grid
                               style={{
                                  display: 'flex',
@@ -289,7 +283,6 @@ export default function Contract() {
                               />
                            </Grid>
                         </Grid>
-                        {/* Features wrapper */}
                         <Grid
                            container
                            columns={12}
@@ -298,7 +291,6 @@ export default function Contract() {
                               justifyContent: 'center',
                            }}
                         >
-                           {/* title */}
                            <Grid item xs={8}>
                               <Typography
                                  style={{
@@ -342,7 +334,6 @@ export default function Contract() {
                               </FormGroup>
                            </Grid>
                         </Grid>
-                        {/* Access Control wrapper */}
                         <Grid
                            container
                            columns={12}
@@ -351,7 +342,6 @@ export default function Contract() {
                               justifyContent: 'center',
                            }}
                         >
-                           {/* title */}
                            <Grid item xs={8}>
                               <Typography
                                  style={{
@@ -364,8 +354,6 @@ export default function Contract() {
                                  Access Control
                               </Typography>
                            </Grid>
-                           {/* checked={isOwnable}
-                        onChange={handleChangeOwnable} */}
                            <Grid item xs={8}>
                               <FormControl>
                                  <RadioGroup

@@ -34,11 +34,7 @@ import { GetTransactionsRequest } from '../../types/getTransactionsRequest'
 import { mint } from '../../utils/mint'
 import { burn } from '../../utils/burn'
 import { LoadingButton } from '@mui/lab'
-
-interface ContractDetails {
-   address: string
-   nftName: string
-}
+import { ContractDetails } from '../../types/contractDetails'
 
 export default function Transactions() {
    const { data: session, status } = useSession()
@@ -47,23 +43,23 @@ export default function Transactions() {
    const [contractAddresses, setContractAddresses] = useState<
       ContractDetails[]
    >([])
-   const [openMint, setOpenMint] = React.useState(false)
-   const [openBurn, setOpenBurn] = React.useState(false)
-   const [mintOrBurnAddress, setMintOrBurnAddress] = React.useState('')
-   const [mintOrBurnID, setMintOrBurnID] = React.useState(-1)
-   const [mintOrBurnAmount, setMintOrBurnAmount] = React.useState(-1)
-   const [loading, setLoading] = React.useState(false)
+   const [openMint, setOpenMint] = useState(false)
+   const [openBurn, setOpenBurn] = useState(false)
+   const [mintOrBurnAddress, setMintOrBurnAddress] = useState('')
+   const [mintOrBurnID, setMintOrBurnID] = useState(-1)
+   const [mintOrBurnAmount, setMintOrBurnAmount] = useState(-1)
+   const [loading, setLoading] = useState(false)
 
    const theme = createTheme({
       palette: {
          primary: {
-            main: '#808080', // Replace with your custom color
+            main: '#808080',
          },
       },
    })
 
    if (status !== 'loading' && contractAddresses.length <= 0) {
-      getContractAddress(session?.user?.id || -1)
+      getContractAddress(session?.user?.id ?? -1)
    }
 
    async function getContractAddress(userId: number) {
@@ -77,7 +73,6 @@ export default function Transactions() {
                })
             })
          }
-
          setContractAddresses(arr)
       })
    }
@@ -93,7 +88,7 @@ export default function Transactions() {
                   // Swal.fire('Error!', res.error, 'error')
                   return
                }
-               setTransactions(res.data) //format eklenmeli
+               setTransactions(res.data)
             }
          )
       } catch (error) {
@@ -102,7 +97,7 @@ export default function Transactions() {
    }
 
    const handleChangeContractAddress = (event: SelectChangeEvent) => {
-      setSelectedContractAddress(event.target.value as string)
+      setSelectedContractAddress(event.target.value)
    }
 
    const columns: GridColDef[] = [
@@ -245,9 +240,11 @@ export default function Transactions() {
    const handlemintOrBurnAddressChange = (e: React.BaseSyntheticEvent) => {
       setMintOrBurnAddress(e.target.value)
    }
+
    const handlemintOrBurnIDChange = (e: React.BaseSyntheticEvent) => {
       setMintOrBurnID(e.target.value)
    }
+
    const handlemintOrBurnAmountChange = (e: React.BaseSyntheticEvent) => {
       setMintOrBurnAmount(e.target.value)
    }
@@ -276,6 +273,7 @@ export default function Transactions() {
          })
       })
    }
+
    const burnNft = () => {
       setLoading(true)
 
@@ -298,6 +296,25 @@ export default function Transactions() {
             handleCloseBurn()
          })
       })
+   }
+
+   const noRowsOverlay = () => {
+      return (
+         <>
+            <div
+               style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+               }}
+            >
+               {selectedContractAddress === ''
+                  ? 'Please choose one contract'
+                  : 'Wait for deployment...'}
+            </div>
+         </>
+      )
    }
 
    return (
@@ -505,20 +522,7 @@ export default function Transactions() {
                            'row--dynamicHeight': 'styles.row',
                         }}
                         slots={{
-                           noRowsOverlay: () => (
-                              <div
-                                 style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    height: '100%',
-                                 }}
-                              >
-                                 {selectedContractAddress === ''
-                                    ? 'Please choose one contract'
-                                    : 'Wait for deployment...'}
-                              </div>
-                           ),
+                           noRowsOverlay: noRowsOverlay,
                         }}
                         onRowClick={(e) => {
                            const win = window.open(
